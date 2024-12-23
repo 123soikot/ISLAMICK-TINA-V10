@@ -3,9 +3,8 @@ module.exports.config = {
   version: "1.0.0",
   hasPermssion: 0,
   credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
-  prefix: true,
   description: "given prefix detail",
-  category: "Dành cho Admin",
+  commandCategory: "Dành cho Admin",
   usages: "",
   cooldowns: 5,
 };
