@@ -1,3 +1,6 @@
+const axios = require('axios');
+const fs = require('fs-extra');
+
 module.exports.config = {
   name: "prefix",
   version: "1.0.0",
@@ -9,6 +12,20 @@ module.exports.config = {
   usages: "",
   cooldowns: 5,
 };
+
+async function getVideoStream(url) {
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream',
+  });
+  const path = `${__dirname}/tempVideo.mp4`;
+  response.data.pipe(fs.createWriteStream(path));
+  return new Promise((resolve, reject) => {
+    response.data.on('end', () => resolve(fs.createReadStream(path)));
+    response.data.on('error', reject);
+  });
+}
 
 module.exports.handleEvent = async ({ event, api, Threads }) => {
   var { threadID, messageID, body, senderID } = event;
@@ -25,21 +42,23 @@ module.exports.handleEvent = async ({ event, api, Threads }) => {
   const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};
   var arr = ["mpre", "mprefix", "prefix", "dấu lệnh", "prefix của bot là gì", "daulenh", "duong", "what prefix", "freefix", "what is the prefix", "bot dead", "bots dead", "where prefix", "what is bot", "what prefix bot", "how to use bot", "how use bot", "where are the bots", "bot not working", "bot is offline", "where prefix", "prefx", "prfix", "prifx", "perfix", "bot not talking", "where is bot"];
   
-  arr.forEach(i => {
+  arr.forEach(async (i) => {
     let str = i[0].toUpperCase() + i.slice(1);
     if (body === i.toUpperCase() || body === i || str === body) {
       const prefix = threadSetting.PREFIX || global.config.PREFIX;
-      const videoLink = "https://i.imgur.com/geRQoeB.mp4"; // Imgur লিংক এখানে যোগ করুন
+      const videoLink = "https://i.imgur.com/geRQoeB.mp4"; // আপনার ভিডিও লিংক
+
+      const videoStream = await getVideoStream(videoLink);
 
       if (data.PREFIX == null) {
         api.sendMessage({
           body: `This Is My Prefix ⇉ [ ${prefix} ]\n💝🥀𝐎𝐖𝐍𝐄𝐑:- ☞Ex 卝 বয়ফ্রেন্ডヅ☜ 💫\n🖤𝚈𝚘𝚞 𝙲𝚊𝚗 𝙲𝚊𝚕𝚕 𝙷𝚒𝚖 Ex 卝 বয়ফ্রেন্ডヅ🖤\n😳𝐇𝐢𝐬 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 𝐢𝐝🤓:- ☞ https://www.facebook.com/mdsakhoyat.hosen.9\n👋For Any Kind Of Help Contact On Telegram Username @Fasul23😇`,
-          attachment: await global.utils.getStreamFromURL(videoLink)
+          attachment: videoStream
         }, threadID, messageID);
       } else {
         api.sendMessage({
           body: `️️️️️️️️️️️️️️️️️️️️️️️️️️️This Is My Prefix ⇉ [ ${prefix} ]\n💝🥀𝐎𝐖𝐍𝐄𝐑:- ☞SOIKOT☜ 💫\n🖤𝚈𝚘𝚞 𝙲𝚊𝚗 𝙲𝚊𝚕𝚕 𝙷𝚒𝚖 🖤\n😳𝐇𝐢𝐬 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 𝐢𝐝🤓:- ☞ https://www.facebook.com/mdsakhoyat.hosen.9\n👋For Any Kind Of Help Contact On Telegram Username @Fasul23 😇`,
-          attachment: await global.utils.getStreamFromURL(videoLink)
+          attachment: videoStream
         }, threadID, messageID);
       }
     }
