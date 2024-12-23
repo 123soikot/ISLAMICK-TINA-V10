@@ -5,7 +5,7 @@ module.exports.config = {
 	credits: "Ex 卝 বয়ফ্রেন্ডヅ",
 	prefix: true,
 	description: "Admin and Bot info.",
-	category: "...",
+	commandCategory: "...",
 	cooldowns: 1,
 	dependencies: 
 	{
