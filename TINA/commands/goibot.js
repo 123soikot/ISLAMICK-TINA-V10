@@ -10,7 +10,7 @@ module.exports.config = {
   credits: "Islamick Cyber Chat",
   prefix: false,
   description: "goibot",
-  category: "Noprefix",
+  commandCategory: "Noprefix",
   usages: "noprefix",
   cooldowns: 5,
 };
