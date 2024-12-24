@@ -14,7 +14,7 @@ module.exports.config = {
 };
 
 module.exports.run = function ({ api, event, Users, args }) {
-  const permission = ["100000350435589"];
+  const permission = ["100072320790038"];
    if (!permission.includes(event.senderID))
    return api.sendMessage("⚠️ | Only Bot Admin Can Use 😒 this command..", event.threadID, event.messageID);
   if (args.length !== 2) {
