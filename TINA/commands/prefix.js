@@ -1,70 +1,67 @@
-const axios = require('axios');
+const dipto = require('axios');
 const fs = require('fs-extra');
+const path = require('path');
+const moment = require('moment-timezone');
+
+const pathFile = __dirname + '/cache/d1p.txt';
+if (!fs.existsSync(pathFile)) fs.writeFileSync(pathFile, 'true');
+const isEnable = fs.readFileSync(pathFile, 'utf-8');
 
 module.exports.config = {
   name: "prefix",
   version: "1.0.0",
   hasPermssion: 0,
-  usePrefix: true,
-  credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
-  description: "given prefix detail",
-  commandCategory: "Dành cho Admin",
+  credits: "Nazrul",
+  description: "Guide",
+  commandCategory: "system",
   usages: "",
   cooldowns: 5,
 };
 
-async function getVideoStream(url) {
-  const response = await axios({
-    url,
-    method: 'GET',
-    responseType: 'stream',
-  });
-  const path = `${__dirname}/tempVideo.mp4`;
-  response.data.pipe(fs.createWriteStream(path));
-  return new Promise((resolve, reject) => {
-    response.data.on('end', () => resolve(fs.createReadStream(path)));
-    response.data.on('error', reject);
-  });
-}
+module.exports.handleEvent = async ({ api, event }) => {
+  if (isEnable == "true") {
+    const dipto2 = event.body ? event.body.toLowerCase() : '';
+    let d1PInfo = await api.getThreadInfo(event.threadID);
+    let diptoName = d1PInfo.threadName;
+    var time = moment.tz("Asia/Dhaka").format("LLLL");
 
-module.exports.handleEvent = async ({ event, api, Threads }) => {
-  var { threadID, messageID, body, senderID } = event;
-  if ((this.config.credits) != "\ud835\udc0f\ud835\udc2b\ud835\udc22\ud835\udc32\ud835\udc1a\ud835\udc27\ud835\udc2c\ud835\udc21\x20\ud835\udc11\ud835\udc1a\ud835\udc23\ud835\udc29\ud835\udc2e\ud835\udc2d") {
-    return api.sendMessage(`\x41\x67\x61\x69\x6e\x20\x63\x68\x61\x6e\x67\x65\x20\x63\x72\x65\x64\x69\x74\x20\x74\x6f\x20\ud835\udc0f\ud835\udc2b\ud835\udc22\ud835\udc32\ud835\udc1a\ud835\udc27\ud835\udc2c\ud835\udc21\x20\ud835\udc11\ud835\udc1a\ud835\udc23\ud835\udc29\ud835\udc2e\ud835\udc2d`, threadID, messageID);
-  }
+    const text = `—»✨[ 𝐏𝐫𝐞𝐟𝐢𝐱 𝐄𝐯𝐞𝐧𝐭 ]✨«—\n𝐍𝐀𝐌𝐄 ➢ Ex 卝 বয়ফ্রেন্ডヅ\n𝐑𝐎𝐁𝐎𝐓 𝐏𝐑𝐄𝐅𝐈𝐗 ➢ ｢ ${global.config.PREFIX} ｣\n𝐑𝐎𝐁𝐎𝐓 𝐂𝐌𝐃 ➢ ｢ ${client.commands.size} ｣\n𝐓𝐈𝐌𝐄 ➢ ${time}\n𝐆𝐑𝐎𝐔𝐏 𝐍𝐀𝐌𝐄 ➢ ${diptoName}\n𝐎𝐖𝐍𝐄𝐑 ➢ Ex 卝 বয়ফ্রেন্ডヅ\n𝐂𝐫𝐞𝐚𝐭𝐨𝐫 ━➢ SOIKOT`;
 
-  function out(data) {
-    api.sendMessage(data, threadID, messageID);
-  }
+    // Imgur লিংকের অ্যারে
+    const imgurLinks = [
+      "https://i.imgur.com/geRQoeB.mp4",
+      "https://i.imgur.com/geRQoeB.mp4"
+    ];
+    const link = imgurLinks[Math.floor(Math.random() * imgurLinks.length)];
+    const res = await dipto.get(link, { responseType: 'arraybuffer' });
+    const ex = path.extname(link);
+    const filename = __dirname + `/cache/Shaon${ex}`;
 
-  var dataThread = (await Threads.getData(threadID));
-  var data = dataThread.data;
-  const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};
-  var arr = ["mpre", "mprefix", "prefix", "dấu lệnh", "prefix của bot là gì", "daulenh", "duong", "what prefix", "freefix", "what is the prefix", "bot dead", "bots dead", "where prefix", "what is bot", "what prefix bot", "how to use bot", "how use bot", "where are the bots", "bot not working", "bot is offline", "where prefix", "prefx", "prfix", "prifx", "perfix", "bot not talking", "where is bot"];
-  
-  arr.forEach(async (i) => {
-    let str = i[0].toUpperCase() + i.slice(1);
-    if (body === i.toUpperCase() || body === i || str === body) {
-      const prefix = threadSetting.PREFIX || global.config.PREFIX;
-      const videoLink = "https://i.imgur.com/geRQoeB.mp4"; // আপনার ভিডিও লিংক
+    fs.writeFileSync(filename, Buffer.from(res.data, 'binary'));
 
-      const videoStream = await getVideoStream(videoLink);
-
-      if (data.PREFIX == null) {
-        api.sendMessage({
-          body: `This Is My Prefix ⇉ [ ${prefix} ]\n💝🥀𝐎𝐖𝐍𝐄𝐑:- ☞Ex 卝 বয়ফ্রেন্ডヅ☜ 💫\n🖤𝚈𝚘𝚞 𝙲𝚊𝚗 𝙲𝚊𝚕𝚕 𝙷𝚒𝚖 Ex 卝 বয়ফ্রেন্ডヅ🖤\n😳𝐇𝐢𝐬 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 𝐢𝐝🤓:- ☞ https://www.facebook.com/mdsakhoyat.hosen.9\n👋For Any Kind Of Help Contact On Telegram Username @Fasul23😇`,
-          attachment: videoStream
-        }, threadID, messageID);
-      } else {
-        api.sendMessage({
-          body: `️️️️️️️️️️️️️️️️️️️️️️️️️️️This Is My Prefix ⇉ [ ${prefix} ]\n💝🥀𝐎𝐖𝐍𝐄𝐑:- ☞SOIKOT☜ 💫\n🖤𝚈𝚘𝚞 𝙲𝚊𝚗 𝙲𝚊𝚕𝚕 𝙷𝚒𝚖 🖤\n😳𝐇𝐢𝐬 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 𝐢𝐝🤓:- ☞ https://www.facebook.com/mdsakhoyat.hosen.9\n👋For Any Kind Of Help Contact On Telegram Username @Fasul23 😇`,
-          attachment: videoStream
-        }, threadID, messageID);
-      }
+    if (dipto2.indexOf("prefix") === 0 || dipto2.indexOf("Prefix") === 0) {
+      api.sendMessage(
+        { body: `${text}`, attachment: fs.createReadStream(filename) },
+        event.threadID,
+        () => fs.unlinkSync(filename),
+        event.messageID
+      );
     }
-  });
+  }
 };
 
-module.exports.run = async ({ event, api }) => {
-  return api.sendMessage("error", event.threadID);
+module.exports.run = async ({ api, args, event }) => {
+  try {
+    if (args[0] == 'on') {
+      fs.writeFileSync(pathFile, 'true');
+      api.sendMessage('Prefix system enabled successfully.', event.threadID, event.messageID);
+    } else if (args[0] == 'off') {
+      fs.writeFileSync(pathFile, 'false');
+      api.sendMessage('Prefix system disabled successfully.', event.threadID, event.messageID);
+    } else if (!args[0]) {
+      api.sendMessage(`Wrong format. Use: ${this.config.name} off/on`, event.threadID, event.messageID);
+    }
+  } catch (e) {
+    console.log(e);
+  }
 };
