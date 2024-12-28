@@ -1,40 +1,75 @@
-const axios = require("axios");
-module.exports.config = {
-    name: "ai",
-    version: "1.0.0",
-    hasPermssion: 0,
-    credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
-    description: "BlackBoxAi by Priyansh",
-    commandCategory: "ai",
-    usages: "[ask]",
-    cooldowns: 2,
-    dependecies: {
-        "axios": "1.4.0"
-    }
+const axios = require('axios'); 
+
+const aApi = async () => {
+  const a = await axios.get(
+    "https://raw.githubusercontent.com/nazrul4x/Noobs/main/Apis.json"
+  );
+  return a.data.api;
 };
 
-module.exports.run = async function ({ api, event, args, Users }) {
+module.exports.config = {
+  name: "ai",
+  version: "1.0.0",
+  author: "♡ Nazrul ♡",
+  role: 0,
+  commandCategory: "ai",
+  description: "talk with ai assistant",
+  guide: {
+      en: "   {pn} your question"
+    }
+}
 
-  const { threadID, messageID } = event;
-
-  const query = encodeURIComponent(args.join(" "));
-
-  var name = await Users.getNameUser(event.senderID);
-
-  if (!args[0]) return api.sendMessage("Please type a message...", threadID, messageID );
+module.exports.onStart = async ({ api, event, args, usersData }) => { 
+  const prompt = args.join(" ");
+  if (!prompt) {
+    return api.sendMessage("Please Provide a Prompt!", event.threadID, event.messageID);
+  }
+  const data = await usersData.get(event.senderID);
+  const name = data.name || "Darling";
   
-  api.sendMessage("Searching for an answer, please wait...", threadID, messageID);
+  try {
+    const res = await axios.get(`${await aApi()}/nazrul/hercai?query=${encodeURIComponent(prompt)}`);
+    const replyMessage = `${name},🪄\n${res.data.answer}`;
+    
+    api.sendMessage(replyMessage, event.threadID, (error, info) => {
+      if (error) return api.sendMessage("An error occurred!", event.threadID, event.messageID);
+      
+      global.GoatBot.onReply.set(info.messageID, {
+        commandName: module.exports.config.name,
+        type: "reply",
+        messageID: info.messageID,
+        author: event.senderID,
+        msg: replyMessage,
+      });
+    }, event.messageID);
+  } catch (err) {
+    api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID);
+  }
+}
 
-  try{
-
-    api.setMessageReaction("⌛", event.messageID, () => { }, true);
-
-    const res = await axios.get(`https://blackboxai-tlh1.onrender.com/api/blackboxai?query=${encodeURIComponent(query)}`);
-
-    const data = res.data.priyansh;
-
-    api.sendMessage(data, event.threadID, event.messageID);
-
+module.exports.onReply = async ({ api, event, args }) => {
+  const xPrompt = args.join(" ");
+  if (!xPrompt) return;
+  
+  try {
+    const res = await axios.get(`${await aApi()}/nazrul/hercai?query=${encodeURIComponent(xPrompt)}`);
+    const xReply = res.data.answer;
+    
+    api.sendMessage(xReply, event.threadID, (error, info) => {
+      if (error) return api.sendMessage("An error occurred!", event.threadID, event.messageID);
+      
+      global.GoatBot.onReply.set(info.messageID, {
+        commandName: module.exports.config.name,
+        type: "reply",
+        messageID: info.messageID,
+        author: event.senderID,
+        msg: xReply,
+      });
+    }, event.messageID);
+  } catch (err) {
+    api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID);
+  }
+          }
     api.setMessageReaction("✅", event.messageID, () => { }, true);
 }
   catch (error) {
