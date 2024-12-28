@@ -1,8 +1,10 @@
+const axios = require("axios");
+
 module.exports.config = {
   name: "gpt",
   version: "1.0.0",
   hasPermssion: 0,
-  credits: "SOIKOT",
+  credits: "Your Name",
   description: "Ask GPT anything or describe an image.",
   commandCategory: "AI",
   usages: "[question] or reply to an image",
@@ -12,21 +14,26 @@ module.exports.config = {
   }
 };
 
-const axios = require("axios");
-
-// Format response for Gothic style
+// Format response function
 function formatResponse(response) {
-  return response.replace(/\*\*(.*?)\*\*/g, (match, p1) => p1); // Optional Gothic conversion
+  return response.replace(/\*\*(.*?)\*\*/g, "$1");
 }
+
+// API Key
+const GEMINI_API_KEY = "AIzaSyCBiwga-es79h9dON00lzk2mvE9HvQkhz4"; // Replace with a secure key
 
 // Handle image processing
 async function handleImage(api, event, imageUrl, query, thinkingMessageID) {
   try {
-    const geminiUrl = `https://deku-rest-api.gleeze.com/gemini?prompt=${encodeURIComponent(query)}&url=${encodeURIComponent(imageUrl)}`;
-    const { data } = await axios.get(geminiUrl);
+    const geminiUrl = `https://api.gemini.com/analyze?prompt=${encodeURIComponent(query)}&url=${encodeURIComponent(imageUrl)}`;
+    const { data } = await axios.get(geminiUrl, {
+      headers: {
+        "Authorization": `Bearer ${GEMINI_API_KEY}`
+      }
+    });
 
     if (data.gemini) {
-      const formattedResponse = `🤖 | 𝗖𝗛𝗔𝗧-𝗚𝗣𝗧-𝟰𝗢
+      const formattedResponse = `🤖 | Gemini AI Response
 ━━━━━━━━━━━━━━━━━━
 ${formatResponse(data.gemini)}
 ━━━━━━━━━━━━━━━━━━`;
@@ -35,7 +42,7 @@ ${formatResponse(data.gemini)}
       throw new Error("Invalid Gemini response");
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("Image processing error:", error.message);
     await api.editMessage("❌ | Sorry, I couldn't process the image.", thinkingMessageID);
   }
 }
@@ -44,11 +51,9 @@ module.exports.run = async function ({ api, event, args }) {
   const threadID = event.threadID;
   const messageID = event.messageID;
 
-  // Send a "Thinking..." message
   const thinkingMessage = await api.sendMessage("🤔 Thinking...", threadID, messageID);
   const thinkingMessageID = thinkingMessage.messageID;
 
-  // If the user replies to an image
   if (event.messageReply && event.messageReply.attachments.length > 0) {
     const imageUrl = event.messageReply.attachments[0].url;
     const query = args.length > 0 ? args.join(" ") : "Please describe this image.";
@@ -56,30 +61,32 @@ module.exports.run = async function ({ api, event, args }) {
     return;
   }
 
-  // If the user provides a text question
   if (args.length === 0) {
-    return api.sendMessage("❌ | Please provide a question or reply to an image.", threadID, messageID);
+    await api.editMessage("❌ | Please provide a question or reply to an image.", thinkingMessageID);
+    return;
   }
 
   const query = args.join(" ");
-  const userId = event.senderID;
-  const apiUrl = `https://deku-rest-api.gleeze.com/api/gpt-4o?q=${encodeURIComponent(query)}&uid=${userId}`;
+  const apiUrl = `https://api.gemini.com/ask?q=${encodeURIComponent(query)}`;
 
   try {
-    const { data } = await axios.get(apiUrl);
+    const { data } = await axios.get(apiUrl, {
+      headers: {
+        "Authorization": `Bearer ${GEMINI_API_KEY}`
+      }
+    });
 
     if (data.result) {
-      const formattedResponse = `🤖 | 𝗖𝗛𝗔𝗧-𝗚𝗣𝗧-𝟰𝗢
+      const formattedResponse = `🤖 | GPT-4O AI Response
 ━━━━━━━━━━━━━━━━━━
 ${formatResponse(data.result)}
 ━━━━━━━━━━━━━━━━━━`;
-
       await api.editMessage(formattedResponse, thinkingMessageID);
     } else {
       throw new Error("Invalid GPT-4O response");
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("Text processing error:", error.message);
     await api.editMessage("❌ | Sorry, I couldn't get a response from GPT.", thinkingMessageID);
   }
 };
