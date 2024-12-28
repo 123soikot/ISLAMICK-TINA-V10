@@ -25,34 +25,34 @@ const time = process.uptime(),
 const moment = require("moment-timezone");
 var juswa = moment.tz("Asia/Dhaka").format("『D/MM/YYYY』 【HH:mm:ss】");
 var link =                                     
-["https://i.imgur.com/EYMwplG.jpeg"];
+["https://i.imgur.com/Ly2MYNG.mp4"];
 var callback = () => api.sendMessage({body:` ╾━╤デ╦︻(▀̿Ĺ̯▀̿ ̿ পরিচয় পর্ব শুরু করা যাক 🇮
 (⌐▀͡ ̯ʖ▀)︻̷┻̿═━一-
 
-☄️Bot Name︎︎︎☄️  ${global.config.BOTNAME}
+☄️𝐁𝐎𝐓 𝐍𝐀𝐌𝐄☄️  ${global.config.BOTNAME}
 
-🔥আমার নাম🔥! ☞︎︎︎☜︎︎︎✰সৈকত(Ex 卝 বয়ফ্রেন্ডヅ) 💔🥀
+🔥𝐍𝐀𝐌𝐄🔥! ☞︎︎︎☜︎︎︎✰𝐒𝐎𝐈𝐊𝐎𝐓(Ex 卝 বয়ফ্রেন্ডヅ) 💔🥀
 
-🙈আমার ফ্রেসবুক  facebook id link🙈➪ https://www.facebook.com/mdsakhoyat.hosen.9 💞🕊️
+🙈 𝗠𝗬 𝗙𝗔𝗖𝗘𝗕𝗢𝗢𝗞 𝗜'𝗗 𝗟𝗜𝗡𝗞🙈➪ https://www.facebook.com/mdsakhoyat.hosen.9 💞🕊️
 
-👋যেকোন সাহায্য জন্য sms করুন 100072320790038 number. 01758307316
+👋যেকোন সাহায্য জন্য sms করুনnumber. 01758307316
 
 ✧══════•❁❀❁•══════✧
 
-🌸Bot Prefix🌸☞︎︎︎☜︎︎︎✰ ${global.config.PREFIX}
+🌸𝗕𝗢𝗧 𝗣𝗥𝗘𝗙𝗜𝗫🌸☞︎︎︎☜︎︎︎✰ ${global.config.PREFIX}
 
-♥️Bot Owner♥️ ☞︎︎︎☜︎︎︎✰ Ex 卝 বয়ফ্রেন্ডヅ 
+♥️𝗕𝗢𝗧 𝗢𝗪𝗡𝗘𝗥♥️ ☞︎︎︎☜︎︎︎✰ Ex 卝 বয়ফ্রেন্ডヅ 
 
 🥳UPTIME🥳
 
-🌪️Today is🌪️ ☞︎︎︎☜︎︎︎✰ ${juswa} 
+🌪️𝗧𝗢𝗗𝗔𝗬 𝗜𝗦🌪️ ☞︎︎︎☜︎︎︎✰ ${juswa} 
 
 ⚡Bot is running⚡ ${hours}:${minutes}:${seconds}.
 
 ✅Thanks for using ${global.config.BOTNAME} Bot🖤
 
 
-🦢🍒•••বটের  ɮ❍┼ এডমিন •••🌷💞
+🦢🍒••  𝗕𝗢𝗧 𝗔𝗗𝗠𝗜𝗡  •••🌷💞
 ┏━🕊️━━°❀•°:🎀🧸💙🧸🎀:°•❀°━━💞━┓
 🌸✦✧✧✧✧✰🍒Ex 卝 বয়ফ্রেন্ডヅ 🌿✰✧✧✧✧✦🌸
 ┗━🕊️━━°❀•°:🎀🧸💙🧸🎀:°•❀°━━💞━┛
