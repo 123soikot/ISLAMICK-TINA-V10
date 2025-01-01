@@ -5,8 +5,8 @@ module.exports.config = {
 	hasPermssion: 0,
 	credits: "MrTomXxX", 
 	description: "hihihihi",
-prefix: false,
-	category: "no prefix",
+   prefix: false,
+	commandCategory: "no prefix",
 	usages: "😆",
     cooldowns: 5, 
 };
