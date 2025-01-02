@@ -19,7 +19,7 @@ event.body.indexOf("love you")==0 ||
  event.body.indexOf("আমি তোমাকে ভালোবাসি")==0) {
 		var msg = {
 				body: " স্ঁর্ঁ তো্ঁ বা্ঁল্ঁ ডা্ঁ \n\ যা্ঁ ভাগ 😒",
-				attachment: fs.createReadStream(__dirname + `/cache/Mon.mp3`)
+				attachment: fs.createReadStream(__dirname + `TINA/cache/Mon.mp3`)
 			}
 			api.sendMessage( msg, threadID, messageID);
     api.setMessageReaction("💝", event.messageID, (err) => {}, true)
