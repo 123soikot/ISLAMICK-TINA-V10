@@ -9,7 +9,7 @@ module.exports.config = {
   credits: "Rahad",
   description: "",
   prefix: true, 
-  category: "no prefix", 
+  commandCategory: "no prefix", 
   usages: "i love You ",
   cooldowns: 5,
   dependencies: {
